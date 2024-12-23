@@ -90,11 +90,13 @@ class _VocalAssistantAppState extends State<VocalAssistantApp> {
                     width: double.infinity,
                     height: 100,
                     child: Center(
-                        child: Text(
-                      _lastWords,
-                      style:
-                          const TextStyle(fontSize: 20, color: UIColors.white),
-                    )),
+                        child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                              _lastWords,
+                              style: const TextStyle(
+                                  fontSize: 20, color: UIColors.white),
+                            ))),
                   ),
                 )
               ],

@@ -48,6 +48,12 @@ windowsFireBaseApiKey=your_windows_firebase_api_key_here
 Replace the placeholder values with your actual API keys:
 - Get your Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
 - Find your Firebase API keys in your Firebase Console project settings
+  
+After injecting your api key into the ``.env`` file please ensure that you run this script
+
+  ```bash
+  flutter pub run build_runner build
+  ```
 
 ⚠️ **Important**: 
 - Never commit the `.env` file to version control
