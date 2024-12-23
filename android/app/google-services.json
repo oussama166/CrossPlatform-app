@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1093526410815",
+    "project_id": "flutterproject-ecf53",
+    "storage_bucket": "flutterproject-ecf53.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093526410815:android:887d3c018bede2a8e10a8a",
+        "android_client_info": {
+          "package_name": "com.flutterai.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6_HztF0aNWWe95TDQc4SDX1lLaDbA2NA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
