@@ -15,7 +15,9 @@ A Flutter-based mobile application that integrates advanced AI models and Fireba
 - [Dart SDK](https://dart.dev/get-dart)
 - [Firebase CLI](https://firebase.google.com/docs/cli)
 - [FlutterFire CLI](https://firebase.flutter.dev/docs/cli/)
-- [Firebase project configured for the application]()
+- Compatible IDE (Visual Studio Code or Android Studio)
+- Firebase project configured for the application
+- Gemini API key from Google AI Studio
 
 ## Installation
 
@@ -32,7 +34,24 @@ cd your-repo
 flutter pub get
 ```
 
-### 3. Configure Firebase
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root directory of your project:
+
+```plaintext
+geminiApiKey=your_gemini_api_key_here
+```
+
+Replace the placeholder values with your actual API keys:
+- Get your Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+- Find your Firebase API keys in your Firebase Console project settings
+
+⚠️ **Important**: 
+- Never commit the `.env` file to version control
+- Add `.env` to your `.gitignore` file
+- Keep your API keys secure and private
+
+### 4. Configure Firebase
 
 #### Install Firebase CLI
 ```bash
@@ -58,7 +77,7 @@ Follow the prompts to:
 2. Navigate to Authentication → Get Started
 3. Enable desired sign-in methods (Email/Password, Google, etc.)
 
-### 4. Update Main Entry Point
+### 5. Update Main Entry Point
 
 Add Firebase initialization to your `main.dart`:
 
@@ -75,7 +94,7 @@ void main() async {
 }
 ```
 
-### 5. Launch the Application
+### 6. Launch the Application
 
 ```bash
 flutter run
