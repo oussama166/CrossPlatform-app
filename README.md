@@ -40,6 +40,9 @@ Create a `.env` file in the root directory of your project:
 
 ```plaintext
 geminiApiKey=your_gemini_api_key_here
+webFireBaseApiKey=your_web_firebase_api_key_here
+androidFireBaseApiKey=your_android_firebase_api_key_here
+windowsFireBaseApiKey=your_windows_firebase_api_key_here
 ```
 
 Replace the placeholder values with your actual API keys:
@@ -72,10 +75,39 @@ Follow the prompts to:
 1. Select your Firebase project
 2. Generate the required `firebase_options.dart` file
 
-#### Enable Authentication
+#### Configure Firebase Authentication
+
 1. Open the [Firebase Console](https://console.firebase.google.com)
-2. Navigate to Authentication → Get Started
-3. Enable desired sign-in methods (Email/Password, Google, etc.)
+2. Select your project
+3. Navigate to Build → Authentication in the left sidebar
+4. Click "Get Started"
+5. Enable Email/Password Authentication:
+   - Click the "Sign-in method" tab
+   - Click "Email/Password" in the providers list
+   - Toggle "Enable" to ON
+   - Click "Save"
+6. (Optional) Configure Password Requirements:
+   - Go to the "Templates" tab
+   - Customize email templates for:
+     - Email verification
+     - Password reset
+     - Email address change
+
+#### Update Security Rules ( Optional )
+
+1. In the Firebase Console, go to Build → Authentication → Rules
+2. Update the rules to allow authenticated access:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
 
 ### 5. Update Main Entry Point
 
@@ -103,7 +135,9 @@ flutter run
 ## Usage Guide
 
 1. **Authentication**
-   - Create an account or sign in using Firebase Authentication
+   - Create an account or sign in using email and password
+   - Verify your email address (if required)
+   - Reset password functionality available
    - Manage your profile and settings
 
 2. **Voice Assistant**
