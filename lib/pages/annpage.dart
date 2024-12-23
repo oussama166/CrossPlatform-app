@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tp/components/MyButtonField.dart';
 import 'package:tp/components/UIColors.dart';
+import 'package:tp/services/AnnService.dart';
 
 class Annpage extends StatefulWidget {
   const Annpage({Key? key}) : super(key: key);
@@ -32,6 +35,9 @@ class _AnnpageState extends State<Annpage> {
     ],
   );
 
+  String resultMessage = "";
+  String? predictedClass;
+
   void pickImageFromGallery() {
     html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
     uploadInput.accept = 'image/*'; // Limit to image files
@@ -41,16 +47,33 @@ class _AnnpageState extends State<Annpage> {
       final file = uploadInput.files?.first;
       if (file != null) {
         final reader = html.FileReader();
-        reader.readAsDataUrl(file);
-        reader.onLoadEnd.listen((_) {
-          setState(() {
-            imageOrPlaceholder = Image.network(
-              reader.result as String,
-              width: 200,
-              height: 200,
-              fit: BoxFit.cover,
-            );
-          });
+        reader.readAsArrayBuffer(file); // Read file as byte array
+        reader.onLoadEnd.listen((_) async {
+          if (reader.result != null) {
+            Uint8List fileBytes = reader.result as Uint8List;
+            String fileName = file.name;
+
+            // Update the UI with the image preview
+            setState(() {
+              imageOrPlaceholder = Image.memory(
+                fileBytes,
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+              );
+            });
+
+            // Send the image to the server
+            final response = await getAnnResp(fileBytes, fileName);
+            debugPrint('Server Response: ${response.body}');
+
+            // Parse the response and update the UI
+            final responseJson = json.decode(response.body);
+            setState(() {
+              resultMessage = responseJson['message'];
+              predictedClass = responseJson['predicted_class_label'];
+            });
+          }
         });
       }
     });
@@ -86,7 +109,50 @@ class _AnnpageState extends State<Annpage> {
             const SizedBox(height: 20),
             Expanded(
               child: Center(
-                child: imageOrPlaceholder,
+                child: Column(
+                  children: [
+                    // Image and Prediction Result Section
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey, width: 2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: imageOrPlaceholder,
+                        ),
+                        const SizedBox(width: 20),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (predictedClass != null)
+                              Text(
+                                'Predicted Class: $predictedClass',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            if (resultMessage.isNotEmpty)
+                              Text(
+                                resultMessage,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.green,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
